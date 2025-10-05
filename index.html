@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SARwatch - Satellite SAR Imagery</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <h1>🛰️ SARwatch</h1>
+        </div>
+        <nav class="nav">
+            <a href="#" class="nav-link">Inicio</a>
+            <a href="#" class="nav-link">Documentación</a>
+            <a href="#" class="nav-link">Contacto</a>
+        </nav>
+    </header>
+
+    <!-- Main Container -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <h2>Controles</h2>
+                <button class="toggle-btn" id="toggleSidebar">◀</button>
+            </div>
+
+            <div class="sidebar-content">
+                <!-- Zone Selector -->
+                <div class="control-group">
+                    <label for="zone-select">Zona / Región</label>
+                    <select id="zone-select" class="control-input">
+                        <option value="">Seleccionar zona...</option>
+                        <option value="norte-america">Norte América</option>
+                        <option value="sur-america">Sur América</option>
+                        <option value="europa">Europa</option>
+                        <option value="asia">Asia</option>
+                        <option value="africa">África</option>
+                        <option value="oceania">Oceanía</option>
+                    </select>
+                </div>
+
+                <!-- Date Selector -->
+                <div class="control-group">
+                    <label for="date-start">Fecha Inicio</label>
+                    <input type="date" id="date-start" class="control-input">
+                </div>
+
+                <div class="control-group">
+                    <label for="date-end">Fecha Fin</label>
+                    <input type="date" id="date-end" class="control-input">
+                </div>
+
+                <!-- Time Range -->
+                <div class="control-group">
+                    <label for="time-range">Rango de Tiempo</label>
+                    <select id="time-range" class="control-input">
+                        <option value="24h">Últimas 24 horas</option>
+                        <option value="7d">Últimos 7 días</option>
+                        <option value="30d">Últimos 30 días</option>
+                        <option value="custom">Personalizado</option>
+                    </select>
+                </div>
+
+                <!-- Event Type -->
+                <div class="control-group">
+                    <label for="event-type">Tipo de Evento</label>
+                    <select id="event-type" class="control-input">
+                        <option value="">Todos los eventos</option>
+                        <option value="incendio">Incendios</option>
+                        <option value="inundacion">Inundaciones</option>
+                        <option value="terremoto">Terremotos</option>
+                        <option value="huracan">Huracanes</option>
+                        <option value="deforestacion">Deforestación</option>
+                        <option value="urbano">Cambios Urbanos</option>
+                    </select>
+                </div>
+
+                <!-- Resolution -->
+                <div class="control-group">
+                    <label for="resolution">Resolución</label>
+                    <select id="resolution" class="control-input">
+                        <option value="high">Alta (< 5m)</option>
+                        <option value="medium">Media (5-20m)</option>
+                        <option value="low">Baja (> 20m)</option>
+                    </select>
+                </div>
+
+                <!-- Apply Button -->
+                <button class="apply-btn" id="applyFilters">Aplicar Filtros</button>
+                <button class="reset-btn" id="resetFilters">Restablecer</button>
+            </div>
+        </aside>
+
+        <!-- Map Container -->
+        <main class="map-container">
+            <div id="map"></div>
+            <div class="map-info">
+                <span id="coordinates">Lat: 0.00, Lon: 0.00</span>
+                <span id="zoom-level">Zoom: 2</span>
+            </div>
+        </main>
+
+        <!-- Right Slide Panel for SAR Images -->
+        <aside class="sar-panel" id="sarPanel">
+            <div class="sar-panel-header">
+                <h2>Imágenes SAR</h2>
+                <button class="close-btn" id="closeSarPanel">✕</button>
+            </div>
+
+            <div class="sar-panel-content">
+                <div class="location-info" id="locationInfo">
+                    <h3>Turís, Valencia</h3>
+                    <p>Lat: 39.3897, Lon: -0.6850</p>
+                </div>
+
+                <div class="sar-images-container" id="sarImagesContainer">
+                    <div class="sar-image-item">
+                        <img src="sar_simulado.png" alt="Imagen SAR" class="sar-preview">
+                        <div class="sar-image-info">
+                            <p><strong>Fecha:</strong> 2025-10-01</p>
+                            <p><strong>Resolución:</strong> 5m</p>
+                            <p><strong>Satélite:</strong> Sentinel-1</p>
+                        </div>
+                        <button class="download-btn" onclick="downloadSARImage('sar_simulado.png')">
+                            ⬇ Descargar Imagen
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 SARwatch - Satellite SAR Imagery Platform | Powered by NASA Data</p>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
