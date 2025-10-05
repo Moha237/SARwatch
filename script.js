@@ -2,6 +2,7 @@
 let map;
 let currentLayer = null;
 let turisMarker = null;
+let laPalmaMarker = null;
 
 // Initialize map on page load
 document.addEventListener('DOMContentLoaded', function() {
@@ -39,6 +40,9 @@ function initMap() {
 
     // Add Turís, Valencia marker
     addTurisMarker();
+
+    // Add La Palma volcano marker
+    addLaPalmaMarker();
 }
 
 // Add example markers to demonstrate functionality
@@ -234,7 +238,14 @@ function showNotification(message) {
 
 // Add Turís, Valencia marker
 function addTurisMarker() {
-    const turisLocation = { lat: 39.3897, lon: -0.6850, name: 'Turís, Valencia' };
+    const turisLocation = {
+        lat: 39.3897,
+        lon: -0.6850,
+        name: 'Turís, Valencia',
+        image: 'sar_simulado.png',
+        date: '2025-10-01',
+        satellite: 'Sentinel-1'
+    };
 
     turisMarker = L.circleMarker([turisLocation.lat, turisLocation.lon], {
         radius: 10,
@@ -262,6 +273,43 @@ function addTurisMarker() {
     });
 }
 
+// Add La Palma volcano marker
+function addLaPalmaMarker() {
+    const laPalmaLocation = {
+        lat: 28.5719,
+        lon: -17.8449,
+        name: 'Volcán de La Palma, Canarias',
+        image: 'la_palma_volcan_slide_sar_rgb.png',
+        date: '2021-10-15',
+        satellite: 'Sentinel-1'
+    };
+
+    laPalmaMarker = L.circleMarker([laPalmaLocation.lat, laPalmaLocation.lon], {
+        radius: 10,
+        fillColor: '#ff8800',
+        color: '#fff',
+        weight: 3,
+        opacity: 1,
+        fillOpacity: 0.8
+    }).addTo(map);
+
+    laPalmaMarker.bindPopup(`
+        <div style="color: #0a0e27; font-weight: 600;">
+            <strong>${laPalmaLocation.name}</strong><br>
+            Coordenadas: ${laPalmaLocation.lat.toFixed(4)}, ${laPalmaLocation.lon.toFixed(4)}<br>
+            <em>Click para ver imágenes SAR</em>
+        </div>
+    `);
+
+    // Add click event to open SAR panel
+    laPalmaMarker.on('click', function() {
+        showNotification('Buscando imágenes SAR...');
+        setTimeout(() => {
+            openSARPanel(laPalmaLocation);
+        }, 1000);
+    });
+}
+
 // Setup SAR panel listeners
 function setupSARPanelListeners() {
     const closeSarPanelBtn = document.getElementById('closeSarPanel');
@@ -275,11 +323,27 @@ function setupSARPanelListeners() {
 function openSARPanel(location) {
     const sarPanel = document.getElementById('sarPanel');
     const locationInfo = document.getElementById('locationInfo');
+    const sarImagesContainer = document.getElementById('sarImagesContainer');
 
     // Update location info
     locationInfo.innerHTML = `
         <h3>${location.name}</h3>
         <p>Lat: ${location.lat.toFixed(4)}, Lon: ${location.lon.toFixed(4)}</p>
+    `;
+
+    // Update SAR images
+    sarImagesContainer.innerHTML = `
+        <div class="sar-image-item">
+            <img src="${location.image}" alt="Imagen SAR" class="sar-preview">
+            <div class="sar-image-info">
+                <p><strong>Fecha:</strong> ${location.date}</p>
+                <p><strong>Resolución:</strong> 5m</p>
+                <p><strong>Satélite:</strong> ${location.satellite}</p>
+            </div>
+            <button class="download-btn" onclick="downloadSARImage('${location.image}')">
+                ⬇ Descargar Imagen
+            </button>
+        </div>
     `;
 
     // Open panel
